@@ -13,9 +13,8 @@ rm Miniforge3-$(uname)-$(uname -m).sh
 /home/abc/.miniforge3/bin/conda create -n donkey python=3.9 -y
 mkdir projects
 cd projects
-git clone https://github.com/Triton-AI/donkeycar.git
+git clone https://github.com/Triton-AI/donkeycar.git -b main
 cd donkeycar
-git checkout main
 /home/abc/.miniforge3/envs/donkey/bin/pip install -e .[dev]
 
 # Give change ownership to abc user
