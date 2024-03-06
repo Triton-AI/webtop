@@ -3,15 +3,17 @@ build-ubuntu-cpu-x86_64:
 	@IMG_NAME=${IMG_NAME}
 	@BASE_FROM=${BASE_FROM}
 
-	DOCKER_BUILDKIT=1 BUILDKIT_PROGRESS=plain docker build \
+	DOCKER_BUILDKIT=1 docker build \
 		--network=host \
 		-f Dockerfile \
-		--target final \
+		--target test \
 		--build-arg BASE_FROM=${BASE_FROM} \
-		--build-arg APT_PACKAGES=apt-packages \
-		--build-arg CUSTOM_INSTALL_FILE=custom-install.sh \
-		--build-arg TEST_INSTALL_FILE=test-layer.sh \
-		--build-arg BASH_SETTINGS_FILE=default \
+		--build-arg APT_PACKAGES=webtop-packages \
+		--build-arg BASH_SETTINGS_FILE=webtop \
+		--build-arg CUSTOM_INSTALL_FILE=webtop-install.sh \
+		--build-arg PIP_PACKAGES=empty \
+		--build-arg PIP_GPU_PACKAGES=empty \
+		--build-arg TEST_INSTALL_FILE=empty-layer.sh \
 		-t ${IMG_NAME} .
 
 .PHONY build-l4t:

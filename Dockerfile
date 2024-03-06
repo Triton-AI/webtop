@@ -2,10 +2,9 @@ ARG BASE_FROM
 FROM $BASE_FROM as base
 LABEL maintainer="Moises Lopez <mdlopezme@gmail.com>"
 
+FROM base as apt
 ARG APT_PACKAGES
 COPY apt/${APT_PACKAGES} /tmp/${APT_PACKAGES}
-
-FROM base as apt
 # Install Apt packages
 RUN apt update && DEBIAN_FRONTEND=noninteractive apt -y install --no-install-recommends \
         $(cat /tmp/${APT_PACKAGES} | cut -d# -f1) && \
@@ -26,7 +25,14 @@ COPY pip/${PIP_PACKAGES} /tmp/${PIP_PACKAGES}
 RUN pip3 install --no-cache-dir -r /tmp/${PIP_PACKAGES} && \
     rm -rf /tmp/${PIP_PACKAGES}
 
-FROM pip as bash
+FROM pip as pip-gpu
+# Install pip packages
+ARG PIP_GPU_PACKAGES
+COPY pip/${PIP_GPU_PACKAGES} /tmp/${PIP_GPU_PACKAGES}
+RUN pip3 install --no-cache-dir -r /tmp/${PIP_GPU_PACKAGES} && \
+    rm -rf /tmp/${PIP_GPU_PACKAGES}
+
+FROM pip-gpu as bash
 # Append to the bashrc file
 ARG BASH_SETTINGS_FILE
 COPY bash/${BASH_SETTINGS_FILE} /tmp/.bashrc
@@ -36,7 +42,7 @@ RUN cat /tmp/.bashrc >> /root/.bashrc && \
 FROM bash as test
 # Run the test install file
 ARG TEST_INSTALL_FILE
-COPY custom/${TEST_INSTALL_FILE} /tmp/${TEST_INSTALL_FILE}
+COPY test/${TEST_INSTALL_FILE} /tmp/${TEST_INSTALL_FILE}
 RUN DEBIAN_FRONTEND=noninteractive /bin/sh /tmp/${TEST_INSTALL_FILE} && \
     rm -rf /tmp/${TEST_INSTALL_FILE}
 
