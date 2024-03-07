@@ -6,6 +6,8 @@ vim
 nano
 tmux
 tmuxp
+python3-pip
+sudo
 
 # Utils
 joystick

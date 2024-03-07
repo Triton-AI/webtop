@@ -1,0 +1,8 @@
+typing-extensions
+environs
+
+# ucsd-ros-rtc
+matplotlib
+crcmod
+pyserial
+supyr-struct
