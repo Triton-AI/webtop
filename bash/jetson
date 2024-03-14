@@ -136,6 +136,7 @@ function pull_all {
 
 # Check if directory is exist and check if it is empty
 if [ -z "$(ls -A ~/projects)" ]; then
+  . ~/donkey/bin/activate
   mkdir -p ~/projects/lib
   cd ~/projects/lib
   git clone https://github.com/Triton-AI/donkeycar.git -b gk
@@ -156,3 +157,4 @@ export LD_PRELOAD=/usr/lib/aarch64-linux-gnu/libGLdispatch.so.0:$LD_PRELOAD
 ldconfig # refresh shared library cache
 
 cd ~/projects/mycars/gk
+. ~/donkey/bin/activate

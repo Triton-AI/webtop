@@ -21,6 +21,7 @@ RUN apt update && DEBIAN_FRONTEND=noninteractive apt -y install --no-install-rec
 FROM apt as pip
 # Install pip packages
 ARG PIP_PACKAGES
+RUN pip3 install --no-cache-dir --upgrade pip
 COPY pip/${PIP_PACKAGES} /tmp/${PIP_PACKAGES}
 RUN pip3 install --no-cache-dir --upgrade -r /tmp/${PIP_PACKAGES} && \
     rm -rf /tmp/${PIP_PACKAGES}
@@ -54,5 +55,6 @@ FROM bash as test
 # Run the test install file
 ARG TEST_INSTALL_FILE
 COPY test/${TEST_INSTALL_FILE} /tmp/${TEST_INSTALL_FILE}
-RUN DEBIAN_FRONTEND=noninteractive /bin/sh /tmp/${TEST_INSTALL_FILE} && \
+RUN --mount=type=ssh \
+    DEBIAN_FRONTEND=noninteractive /bin/sh /tmp/${TEST_INSTALL_FILE} && \
     rm -rf /tmp/${TEST_INSTALL_FILE}

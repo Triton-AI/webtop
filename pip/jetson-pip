@@ -2,3 +2,4 @@ matplotlib
 crcmod
 pyserial
 supyr-struct
+virtualenv
